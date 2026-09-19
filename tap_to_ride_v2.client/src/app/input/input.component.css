@@ -1,0 +1,112 @@
+:host {
+  display: block;
+  height: 100vh;
+  background: #14212a;
+  color: #eef3f6;
+  font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+.terminal {
+  max-width: 420px;
+  margin: 0 auto;
+  padding: 32px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin: 0;
+  text-align: center;
+}
+
+.fare-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.9rem;
+  color: #a8bac6;
+}
+
+  .field input {
+    font-size: 1.4rem;
+    padding: 14px 16px;
+    border-radius: 8px;
+    border: 1px solid #2a3e4b;
+    background: #1a2a35;
+    color: #eef3f6;
+  }
+
+    .field input:focus {
+      outline: none;
+      border-color: #6b93ad;
+    }
+
+.take-fare {
+  font-size: 1.3rem;
+  font-weight: 700;
+  padding: 18px;
+  border: none;
+  border-radius: 8px;
+  background: #4a7691;
+  color: #fff;
+  cursor: pointer;
+}
+
+  .take-fare:active {
+    background: #345363;
+  }
+
+.readout {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 20px;
+  border-top: 1px solid #2a3e4b;
+}
+
+.counter {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.counter-value {
+  font-size: 2.5rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.counter-label {
+  font-size: 0.8rem;
+  color: #a8bac6;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.status {
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 6px;
+  background: #33261440;
+  color: #a8bac6;
+}
+
+.status-ok {
+  background: #173404;
+  color: #97c459;
+}
+
+.status-bad {
+  background: #3a211e;
+  color: #dc8378;
+}

@@ -1,0 +1,47 @@
+@Tap_to_Ride_v2.Server_HostAddress = http://localhost:5058
+
+### 1. Post a batch of two trips for rider-001 (R12 + R12 = R24)
+POST {{Tap_to_Ride_v2.Server_HostAddress}}/api/batches
+Content-Type: application/json
+
+{
+  "batchId": "11111111-1111-1111-1111-111111111111",
+  "trips": [
+    { "tripId": "t1", "riderId": "rider-001", "fareCents": 1200, "takenAt": "2026-09-18T06:15:00Z", "signature": "x" },
+    { "tripId": "t2", "riderId": "rider-001", "fareCents": 1200, "takenAt": "2026-09-18T06:45:00Z", "signature": "x" }
+  ]
+}
+
+### 2. Post the exact same batch again — the idempotency test
+POST {{Tap_to_Ride_v2.Server_HostAddress}}/api/batches
+Content-Type: application/json
+
+{
+  "batchId": "11111111-1111-1111-1111-111111111111",
+  "trips": [
+    { "tripId": "t1", "riderId": "rider-001", "fareCents": 1200, "takenAt": "2026-09-18T06:15:00Z", "signature": "x" },
+    { "tripId": "t2", "riderId": "rider-001", "fareCents": 1200, "takenAt": "2026-09-18T06:45:00Z", "signature": "x" }
+  ]
+}
+
+### 3. Confirm the charge is R24.00 (2400), not R48.00 — request 2 must not have doubled it
+GET {{Tap_to_Ride_v2.Server_HostAddress}}/api/riders/rider-001/charge
+
+### 4. Push rider-001 past the R50 daily cap with a second batch
+POST {{Tap_to_Ride_v2.Server_HostAddress}}/api/batches
+Content-Type: application/json
+
+{
+  "batchId": "22222222-2222-2222-2222-222222222222",
+  "trips": [
+    { "tripId": "t3", "riderId": "rider-001", "fareCents": 1200, "takenAt": "2026-09-18T07:00:00Z", "signature": "x" },
+    { "tripId": "t4", "riderId": "rider-001", "fareCents": 1200, "takenAt": "2026-09-18T07:10:00Z", "signature": "x" },
+    { "tripId": "t5", "riderId": "rider-001", "fareCents": 1200, "takenAt": "2026-09-18T07:20:00Z", "signature": "x" }
+  ]
+}
+
+### 5. Confirm the cap held at R50.00 (5000), not the raw R60.00 sum
+GET {{Tap_to_Ride_v2.Server_HostAddress}}/api/riders/rider-001/charge
+
+### 6. Check that every individual trip is still there, itemised
+GET {{Tap_to_Ride_v2.Server_HostAddress}}/api/riders/rider-001/trips

@@ -1,0 +1,28 @@
+<div class="terminal">
+  <h1>Tap to Ride</h1>
+
+  <form class="fare-form" (ngSubmit)="recordFare()">
+    <label class="field">
+      <span>Rider code</span>
+      <input [(ngModel)]="riderId" name="riderId" required autofocus />
+    </label>
+
+    <label class="field">
+      <span>Fare (cents)</span>
+      <input [(ngModel)]="fareCents" name="fareCents" type="number" required />
+    </label>
+
+    <button type="submit" class="take-fare">Take fare</button>
+  </form>
+
+  <div class="readout">
+    <div class="counter">
+      <span class="counter-value">{{ unsent }}</span>
+      <span class="counter-label">unsent</span>
+    </div>
+
+    <div class="status" [class.status-ok]="lastSyncOk === true" [class.status-bad]="lastSyncOk === false">
+      {{ lastSyncOk === null ? 'checking…' : (lastSyncOk ? 'server reachable' : 'server unreachable') }}
+    </div>
+  </div>
+</div>

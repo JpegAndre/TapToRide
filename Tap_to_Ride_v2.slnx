@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="tap_to_ride_v2.client/tap_to_ride_v2.client.esproj">
+    <Build />
+    <Deploy />
+  </Project>
+  <Project Path="Tap_to_Ride_v2.Server/Tap_to_Ride_v2.Server.csproj" />
+</Solution>

@@ -1,0 +1,77 @@
+# Root ignore file for the solution. The Angular project keeps its own
+# .gitignore for client-specific paths; this covers the server, the IDE and
+# anything shared.
+
+# ---------------------------------------------------------------------------
+# Visual Studio
+# ---------------------------------------------------------------------------
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.userprefs
+
+# ---------------------------------------------------------------------------
+# Build output (.NET and the .esproj wrapper around the client)
+# ---------------------------------------------------------------------------
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+[Ll]og/
+[Ll]ogs/
+artifacts/
+publish/
+*.publishsettings
+PublishScripts/
+
+# MSBuild / Roslyn
+*.binlog
+*.tlog
+project.lock.json
+project.fragment.lock.json
+.msbuild.sln.cache
+
+# ---------------------------------------------------------------------------
+# SQLite. The server's database is tracked deliberately so its sample data
+# travels with the repo; -wal/-shm are transient and must never be committed.
+# ---------------------------------------------------------------------------
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3
+!Tap_to_Ride_v2.Server/settlement.db
+
+# ---------------------------------------------------------------------------
+# Secrets and local config
+# ---------------------------------------------------------------------------
+appsettings.*.local.json
+*.pfx
+*.key
+secrets.json
+
+# ---------------------------------------------------------------------------
+# Node (the client's own .gitignore covers its paths; this catches strays)
+# ---------------------------------------------------------------------------
+node_modules/
+npm-debug.log*
+yarn-error.log*
+.angular/cache
+
+# ---------------------------------------------------------------------------
+# Test and coverage output
+# ---------------------------------------------------------------------------
+[Tt]est[Rr]esult*/
+coverage/
+*.coverage
+*.trx
+
+# ---------------------------------------------------------------------------
+# OS noise
+# ---------------------------------------------------------------------------
+.DS_Store
+Thumbs.db
+ehthumbs.db
+desktop.ini
