@@ -11,6 +11,18 @@ namespace Tap_to_Ride_v2.Server.Controllers
         private readonly ServerDbContext _db;
         public RidersController(ServerDbContext db) => _db = db;
 
+        // Today's settled charges for every rider that has any. The rows themselves
+        // are the roster — a rider with no fares today simply isn't in the result.
+        [HttpGet("charges")]
+        public async Task<IActionResult> GetCharges()
+        {
+            var date = DateOnly.FromDateTime(DateTime.UtcNow);
+            return Ok(await _db.SettledCharges
+                .Where(c => c.Date == date)
+                .OrderBy(c => c.RiderId)
+                .ToListAsync());
+        }
+
         [HttpGet("{riderId}/charge")]
         public async Task<IActionResult> GetCharge(string riderId)
         {

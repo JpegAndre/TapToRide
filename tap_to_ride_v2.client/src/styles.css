@@ -1,1 +1,124 @@
 /* You can add global styles to this file, and also import other style files */
+
+/* Query pane shared by the rider breakdown and the daily aggregate. */
+.lookup-panel {
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 32px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  color: #eef3f6;
+  font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+  .lookup-panel h2 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin: 0;
+    text-align: center;
+  }
+
+  .lookup-panel .lookup-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .lookup-panel .field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 0.9rem;
+    color: #a8bac6;
+  }
+
+    .lookup-panel .field input {
+      font-family: inherit;
+      font-size: 1.4rem;
+      padding: 14px 16px;
+      border-radius: 8px;
+      border: 1px solid #2a3e4b;
+      background: #1a2a35;
+      color: #eef3f6;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+      .lookup-panel .field input:focus {
+        outline: none;
+        border-color: #6b93ad;
+      }
+
+      .lookup-panel .field input::placeholder {
+        color: #6d808d;
+      }
+
+  .lookup-panel .lookup {
+    font-size: 1.3rem;
+    font-weight: 700;
+    padding: 18px;
+    border: none;
+    border-radius: 8px;
+    background: #4a7691;
+    color: #fff;
+    cursor: pointer;
+  }
+
+    .lookup-panel .lookup:active {
+      background: #345363;
+    }
+
+    .lookup-panel .lookup:disabled {
+      background: #2a3e4b;
+      color: #6d808d;
+      cursor: default;
+    }
+
+/* Read-only JSON viewer, shared by the unsent queue and the query panes. */
+.json-panel {
+  text-align: left; /* app-root centres its text, which would inherit into the <pre> */
+  border-radius: 12px;
+  border: 1px solid #2a3e4b;
+  background: #1a2a35;
+  padding: 16px;
+  max-height: 320px;
+  overflow: auto;
+
+  /* Firefox, and Chrome/Edge 121+ */
+  scrollbar-width: thin;
+  scrollbar-color: #3a5263 transparent;
+}
+
+  /* Older WebKit/Blink, which ignores the two properties above. */
+  .json-panel::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  .json-panel::-webkit-scrollbar-track,
+  .json-panel::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+
+  .json-panel::-webkit-scrollbar-thumb {
+    background: #3a5263;
+    border-radius: 8px;
+    /* Padding effect: the border shows the track through, insetting the thumb. */
+    border: 2px solid transparent;
+    background-clip: content-box;
+  }
+
+    .json-panel::-webkit-scrollbar-thumb:hover {
+      background: #4a7691;
+      background-clip: content-box;
+    }
+
+  .json-panel pre {
+    margin: 0;
+    font-family: "Cascadia Mono", Consolas, "SF Mono", monospace;
+    font-size: 0.8rem;
+    line-height: 1.5;
+    color: #a8bac6;
+    white-space: pre;
+  }

@@ -1,14 +1,22 @@
+
 <div class="terminal">
   <h1>Tap to Ride</h1>
 
   <form class="fare-form" (ngSubmit)="recordFare()">
     <label class="field">
       <span>Rider code</span>
-      <input [(ngModel)]="riderId" name="riderId" required autofocus />
+      <!--<input [(ngModel)]="riderId" name="riderId" required autofocus />-->
+      <select [(ngModel)]="riderId" name="riderId" required autofocus>
+        <option value="" disabled hidden>Select a rider</option>
+        @for (rider of riders; track rider) {
+        <option [value]="rider">{{ rider }}</option>
+        }
+      </select>
     </label>
 
+
     <label class="field">
-      <span>Fare (cents)</span>
+      <span>Fare</span>
       <input [(ngModel)]="fareCents" name="fareCents" type="number" required />
     </label>
 
@@ -21,8 +29,10 @@
       <span class="counter-label">unsent</span>
     </div>
 
-    <div class="status" [class.status-ok]="lastSyncOk === true" [class.status-bad]="lastSyncOk === false">
-      {{ lastSyncOk === null ? 'checking…' : (lastSyncOk ? 'server reachable' : 'server unreachable') }}
+    <div class="status" [class.status-ok]="lastSyncOk" [class.status-bad]="!lastSyncOk">
+      {{ lastSyncOk ? 'server reachable' : 'server unreachable' }}
     </div>
   </div>
+
+  <app-unsent></app-unsent>
 </div>

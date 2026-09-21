@@ -33,26 +33,29 @@ namespace Tap_to_Ride_v2.Server.Controllers
             }));
             await _db.SaveChangesAsync();
 
-            foreach (var riderId in dto.Trips.Select(t => t.RiderId).Distinct())
-                await SettleRider(riderId);
+            var affected = dto.Trips
+                .Select(t => new { t.RiderId, Date = DateOnly.FromDateTime(t.TakenAt) })
+                .Distinct();
+
+            foreach (var rider in affected)
+                await SettleRider(rider.RiderId, rider.Date);
 
             await transaction.CommitAsync();
             return Ok(new { alreadyProcessed = false, tripCount = dto.Trips.Count });
         }
 
-        private async Task SettleRider(string riderId)
+        private async Task SettleRider(string riderId, DateOnly date)
         {
-            var todayUtc = DateTime.UtcNow.Date;
-            var today = DateOnly.FromDateTime(DateTime.UtcNow);
+            var dayUtc = date.ToDateTime(TimeOnly.MinValue);
 
             var total = await _db.Trips
-        .Where(t => t.RiderId == riderId && t.TakenAt.Date == todayUtc)
+        .Where(t => t.RiderId == riderId && t.TakenAt.Date == dayUtc)
         .SumAsync(t => t.FareCents);
             // var capped = Math.Min(total, DailyCapCents);
 
-            var charge = await _db.SettledCharges.SingleOrDefaultAsync(c => c.RiderId == riderId && c.Date == today);
+            var charge = await _db.SettledCharges.SingleOrDefaultAsync(c => c.RiderId == riderId && c.Date == date);
             if (charge is null)
-                _db.SettledCharges.Add(new SettledCharge { RiderId = riderId, Date = today, TotalCents = total });
+                _db.SettledCharges.Add(new SettledCharge { RiderId = riderId, Date = date, TotalCents = total });
             else
                 charge.TotalCents = total;
 

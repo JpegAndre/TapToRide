@@ -1,13 +1,13 @@
 :host {
   display: block;
-  height: 100vh;
-  background: #14212a;
+  min-height: 100vh;
+/*  background: #14212a;*/
   color: #eef3f6;
   font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
 }
 
 .terminal {
-  max-width: 420px;
+  max-width: 520px;
   margin: 0 auto;
   padding: 32px 20px;
   display: flex;
@@ -36,18 +36,56 @@ h1 {
   color: #a8bac6;
 }
 
-  .field input {
+  .field input,
+  .field select {
+    font-family: inherit;
     font-size: 1.4rem;
     padding: 14px 16px;
     border-radius: 8px;
     border: 1px solid #2a3e4b;
     background: #1a2a35;
     color: #eef3f6;
+    width: 100%;
+    box-sizing: border-box;
   }
 
-    .field input:focus {
+    .field input:focus,
+    .field select:focus {
       outline: none;
       border-color: #6b93ad;
+    }
+
+  /* Drop the native number spinners; the fare is always typed in full. */
+  .field input[type="number"] {
+    appearance: none;
+    -moz-appearance: textfield;
+  }
+
+    .field input[type="number"]::-webkit-outer-spin-button,
+    .field input[type="number"]::-webkit-inner-spin-button {
+      appearance: none;
+      margin: 0;
+    }
+
+  /* Replace the native arrow with one that matches the palette. */
+  .field select {
+    appearance: none;
+    padding-right: 44px;
+    cursor: pointer;
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23a8bac6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 6l5 5 5-5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+    background-size: 16px;
+  }
+
+    /* The popup list is OS-rendered, so it needs its colours set separately. */
+    .field select option {
+      background: #1a2a35;
+      color: #eef3f6;
+    }
+
+    .field select option:disabled {
+      color: #6d808d;
     }
 
 .take-fare {
@@ -71,6 +109,8 @@ h1 {
   align-items: center;
   padding-top: 20px;
   border-top: 1px solid #2a3e4b;
+  border-bottom: 1px solid #2a3e4b;
+  padding-bottom: 20px;
 }
 
 .counter {

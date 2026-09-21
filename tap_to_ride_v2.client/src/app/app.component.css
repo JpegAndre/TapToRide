@@ -1,8 +1,25 @@
-﻿:host {
-    max-width: 1280px;
+:host {
+    display: block;
+    max-width: 1500px;
+    margin: 0 auto;
     padding: 2rem;
     text-align: center;
 }
+
+/* Terminal, breakdown and daily total sit in three columns, wrapping on
+   narrower screens rather than squeezing. */
+.workspace {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 32px;
+}
+
+    .workspace > * {
+        flex: 1 1 340px;
+        min-width: 0; /* let the JSON panels scroll instead of widening the column */
+    }
 
 th, td {
     padding-left: 1rem;

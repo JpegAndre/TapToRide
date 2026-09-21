@@ -1,0 +1,20 @@
+<div class="lookup-panel">
+  <h2>Rider breakdown</h2>
+
+  <form class="lookup-form" (ngSubmit)="lookup()">
+    <label class="field">
+      <span>Rider code</span>
+      <input [(ngModel)]="riderId" name="riderId" placeholder="rider-001" required />
+    </label>
+
+    <button type="submit" class="lookup" [disabled]="loading || !riderId.trim()">
+      {{ loading ? 'Loading…' : 'Get breakdown' }}
+    </button>
+  </form>
+
+  @if (payload) {
+    <div class="json-panel">
+      <pre>{{ payload }}</pre>
+    </div>
+  }
+</div>

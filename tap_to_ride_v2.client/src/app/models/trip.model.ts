@@ -9,4 +9,5 @@ export interface TripDto {
 export interface PendingBatch {
   batchId: string;
   trips: TripDto[];
+  sealed?: boolean;
 }
