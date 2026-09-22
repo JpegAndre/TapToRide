@@ -1,3 +1,14 @@
+@if (rejected.length) {
+  <div class="rejected-panel">
+    <strong>{{ rejected.length }} batch(es) refused by the server — not being retried.</strong>
+    <ul>
+      @for (batch of rejected; track batch.batchId) {
+        <li>{{ batch.batchId }} — {{ tripCount(batch) }} trip(s): {{ batch.rejectedReason }}</li>
+      }
+    </ul>
+  </div>
+}
+
 <div class="json-panel">
   <pre>{{ payload }}</pre>
 </div>

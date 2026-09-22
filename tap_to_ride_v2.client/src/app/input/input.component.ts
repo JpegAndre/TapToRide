@@ -42,7 +42,9 @@ export class InputComponent implements OnInit, OnDestroy {
   async recordFare(): Promise<void> {
     if (!this.riderId || this.fareCents === null) { return; }
 
-    await this.queue.recordFare(this.riderId, this.fareCents * 100);
+    // Rounded because the signature covers the cents figure verbatim, and binary
+    // floating point turns entries like 1.15 into 114.99999999999999.
+    await this.queue.recordFare(this.riderId, Math.round(this.fareCents * 100));
     this.fareCents = null;
     await this.refreshUnsent();
   }

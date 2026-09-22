@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { firstValueFrom, interval, Subscription, BehaviorSubject, Subject } from 'rxjs';
 import { TripQueueService } from './trip-queue.service';
+import { CryptoService } from './crypto.service';
+import { describeHttpError } from './http-error';
 import { environment } from '../../environments/environment';
 
 @Injectable({
@@ -17,7 +19,10 @@ export class SyncService {
   private intervalMs = 3000;
   private lastLogged?: boolean;
 
-  constructor(private http: HttpClient, private queue: TripQueueService) { }
+  constructor(
+    private http: HttpClient,
+    private queue: TripQueueService,
+    private signer: CryptoService) { }
 
   /** How long until the next attempt, for the "retrying in Xs" message. */
   get retrySeconds(): number { return Math.round(this.intervalMs / 1000); }
@@ -37,6 +42,10 @@ export class SyncService {
     }
     this.setStatus(true);
 
+    // The server is up, so this is the moment enrollment can succeed. Anything
+    // captured while offline gets its signature when the batch below is sealed.
+    await this.signer.ensureEnrolled();
+
     // Freeze whatever has accumulated, then send. Fares tapped from here on go
     // to a fresh batch, so nothing is added to a batchId the server has seen.
     await this.queue.sealOpenBatch();
@@ -45,15 +54,30 @@ export class SyncService {
 
     for (const batch of await this.queue.sealedBatches()) {
       try {
-        // Posted field by field: `sealed` is local bookkeeping and must not
-        // appear on the wire, where the server expects exactly BatchDto.
+        // Posted field by field: `sealed`, `rejected` and a trip's `unsigned` flag are
+        // local bookkeeping and must not appear on the wire, where the server expects
+        // exactly BatchDto.
         await firstValueFrom(this.http.post(`${environment.apiUrl}/batches`, {
           batchId: batch.batchId,
-          trips: batch.trips
+          deviceId: batch.deviceId,
+          trips: batch.trips.map(t => ({
+            tripId: t.tripId,
+            riderId: t.riderId,
+            fareCents: t.fareCents,
+            takenAt: t.takenAt,
+            signature: t.signature
+          }))
         }));
         await this.queue.markSettled(batch.batchId);
         anySettled = true;
-      } catch {
+      } catch (err) {
+        // A refusal is about this batch, not the connection. Retrying it forever would
+        // block every batch queued behind it, so park it and keep draining.
+        if (isPermanentRejection(err)) {
+          await this.queue.markRejected(batch.batchId, describeRejection(err));
+          continue;
+        }
+
         this.setStatus(false);
         if (anySettled) { this.settled$.next(); } // some did land before the failure
         return; // leave the rest queued, retry everything on the next tick
@@ -86,4 +110,18 @@ export class SyncService {
 
     this.status$.next(ok);
   }
+}
+
+/**
+ * True when the server understood the batch and said no. Status 0 is a connection
+ * that never landed, and `ng serve` turns a refused connection into a 503 sentinel
+ * (see http-error.ts) — both are transient and must stay retryable.
+ */
+function isPermanentRejection(err: unknown): boolean {
+  return err instanceof HttpErrorResponse && err.status >= 400 && err.status < 500;
+}
+
+function describeRejection(err: unknown): string {
+  const reason = err instanceof HttpErrorResponse ? err.error?.reason : null;
+  return typeof reason === 'string' ? reason : describeHttpError(err);
 }

@@ -4,4 +4,5 @@
     <Deploy />
   </Project>
   <Project Path="Tap_to_Ride_v2.Server/Tap_to_Ride_v2.Server.csproj" />
+  <Project Path="Tap_to_Ride_v2.Server.Tests/Tap_to_Ride_v2.Server.Tests.csproj" />
 </Solution>

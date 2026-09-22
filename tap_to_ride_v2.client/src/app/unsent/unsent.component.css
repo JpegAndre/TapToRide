@@ -1,3 +1,16 @@
 :host {
   display: block;
 }
+
+.rejected-panel {
+  border: 1px solid #b3261e;
+  border-radius: 4px;
+  padding: 0.75rem;
+  margin-bottom: 0.75rem;
+  color: #b3261e;
+}
+
+.rejected-panel ul {
+  margin: 0.5rem 0 0;
+  padding-left: 1.25rem;
+}
