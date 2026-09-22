@@ -29,6 +29,19 @@
       <span class="counter-label">unsent</span>
     </div>
 
+    @if (showTick) {
+    <div class="tick" [@fadeTick]>
+      <svg viewBox="0 0 24 24" fill="none" role="img">
+        <title>Fare recorded</title>
+        <path d="M3.5 13 L9 18.5 L20.5 5"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              stroke-linejoin="round" />
+      </svg>
+    </div>
+    }
+
     <div class="status" [class.status-ok]="lastSyncOk" [class.status-bad]="!lastSyncOk">
       {{ lastSyncOk ? 'server reachable' : 'server unreachable' }}
     </div>

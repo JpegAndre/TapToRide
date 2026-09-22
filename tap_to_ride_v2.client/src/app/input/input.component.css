@@ -150,3 +150,15 @@ h1 {
   background: #3a211e;
   color: #dc8378;
 }
+
+.tick {
+  display: flex;
+  align-items: center;
+  color: #22c55e;
+  font-size: 2rem;
+}
+
+  .tick svg {
+    width: 1em;
+    height: 1em;
+  }

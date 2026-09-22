@@ -2,7 +2,7 @@
 
 /* Query pane shared by the rider breakdown and the daily aggregate. */
 .lookup-panel {
-  max-width: 520px;
+  max-width: 550px;
   margin: 0 auto;
   padding: 32px 20px;
   display: flex;
